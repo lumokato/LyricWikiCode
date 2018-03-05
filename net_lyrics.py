@@ -72,7 +72,7 @@ def getAlbumList(id_Group):
 
 
 # 根据专辑id获取歌词页面
-def getTrackList(id_Album):
+def getTrackList(id_Album,name_Album):
     url_Album = 'http://music.163.com/api/album/' + str(id_Album) + '?ext=true&id=' + str(
         id_Album) + '&offset=0&total=true&limit=1000'
     page_album = getHtml(url_Album)
@@ -82,13 +82,12 @@ def getTrackList(id_Album):
     song_list = {}
     for songid in songid_total:
         song_name = getRegex(songid[::-1] + r':"di","(.+?)"', page_rev)[0][::-1]
-        song_list[songid] = song_name
+        song_list[songid] = song_name + "    " + name_Album
     return song_list
 
 # 获取歌词页面
 def songpage(sid, sname, savetxt):
-    writelinez = ['\n\n#####################################\n\n', sname,
-                  '\n\n#####################################\n\n']
+    writelinez = ['\n\n#####################################\n\n', sname,"    "]
     url_Track = 'http://music.163.com/api/song/lyric?os=pc&id=' + str(sid) + '&lv=-1&kv=-1&tv=-1'
     page_song = getHtml(url_Track)
     if len(page_song) > 150:
@@ -104,7 +103,13 @@ def songpage(sid, sname, savetxt):
 
 # 根据歌词页面转化为wiki格式
 def lrctotxt(songpage):
-    writeline = ['__LYRICS__\n\n{{歌词信息|\n']
+    writeline = []
+    lrc_det = getRegex(r'"lyricUser":{.+?}', songpage)
+    if lrc_det:
+        lrc_user = getRegex(r'"nickname":"(.+?)"', lrc_det[0])[0]
+        writeline.append("歌词用户：" + lrc_user)
+    writeline.append('\n\n#####################################\n\n')
+    writeline.append('__LYRICS__\n\n{{歌词信息|\n')
     lrc = getRegex(r'"lrc":{(.*?}),"', songpage)[0]
     tlrc = getRegex(r'"tlyric":{(.*?}),"', songpage)[0]
     # 在有翻译时
@@ -217,16 +222,16 @@ def saveAll(groupnum):
     for albums in albumlist:
         albumname = albums[0]
         albumid = albums[1]
-        writelinea = [albumname, '\n&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n']
+        writelinea = [albumname, '\n']
         with open(groupname, 'a', encoding='utf-8') as file:
             for writex in writelinea:
                 file.write('%s' % (writex))
-        songid_total.update(getTrackList(albumid))
+        songid_total.update(getTrackList(albumid,albumname))
     for songlist in sorted(songid_total.items(), key=lambda item: item[1]):
         songpage(songlist[0], songlist[1], groupname)
 
 
 # print(getAlbumList(19783)[1][0])
-saveAll(34)
+saveAll(49)
 # getTrackList(82840,"test")
 # songpage('27580735','xx','xxx')
