@@ -63,6 +63,20 @@ def getHtml(url):
     return html
 
 
+def user_id_change(netease_id):
+    user_id = netease_id
+    id_dic = {"風花字幕社": "[[用户:云卷]]",
+              "DiPLOPiA": "[[用户:DiPLOPiA]]",
+              "99NeroCake": "[[用户:99NeroCake]]",
+              "-绘芸-": "[[用户:月霜]]",
+              "Ecauchy": "[[用户:Ecauchy]]",
+              "秘封罐头里的翅融": "[[用户:鬼翅融]]"}
+
+    if netease_id in id_dic.keys():
+        user_id = id_dic[netease_id]
+    return user_id
+
+
 def getAlbumList(id_Group):
     # 根据社团id获取专辑列表
     url_Group = 'http://music.163.com/api/artist/albums/' + str(id_Group) + '?id=' + str(
@@ -97,7 +111,7 @@ def getTrackList(id_album, name_album):
 
 def songpage(sid, sname, savetxt):
     # 获取歌词页面
-    writelinez = ['%\n#####################################\n\n', sname, "    "]
+    writelinez = ['\n#####################################\n\n', sname, "    "]
     url_track = 'http://music.163.com/api/song/lyric?os=pc&id=' + str(sid) + '&lv=-1&kv=-1&tv=-1'
     page_song = getHtml(url_track)
     if len(page_song) > 150:
@@ -112,6 +126,7 @@ def songpage(sid, sname, savetxt):
                 with open(savetxt + '_re', 'a', encoding='utf-8') as file:
                     for writere in writeline_re:
                         file.write('%s' % (writere))
+            writelinez.append('%' + sname)
             with open(savetxt, 'a', encoding='utf-8') as file:
                 for writex in writelinez:
                     file.write('%s' % (writex))
@@ -153,7 +168,7 @@ def lrctotxt(songpage):
         tran_det = getRegex(r'"transUser":{.+?}', songpage)
         if tran_det:
             tran_user = getRegex(r'"nickname":"(.+?)"', tran_det[0])[0]
-        writeline.append('| 语言 = 日文\n| 翻译 = 中文\n| 译者 = ' + tran_user + '\n}}\n\nlyrics=\n\n')
+        writeline.append('| 语言 = 日文\n| 翻译 = 中文\n| 译者 = ' + user_id_change(tran_user) + '\n}}\n\nlyrics=\n\n')
         timeline = {}
         linex = getRegex(r'(\[\d.*?)\\n', lrc)
         tlinex = getRegex(r'(\[\d.*?)\\n', tlrc)
@@ -296,8 +311,8 @@ def saveAll(groupnum):
     for songlist in sorted(songid_total.items(), key=lambda item: item[1]):
         songpage(songlist[0], songlist[1], groupname)
 
-
+# sublime: __LYRICS__[^n]+?%
 # print(getAlbumList(19783)[1][0])
 # getTrackList(82840,"test")
 # songpage('27580735','xx','xxx')
-saveAll(69)
+saveAll(59)
