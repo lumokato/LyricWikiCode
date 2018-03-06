@@ -70,6 +70,8 @@ def user_id_change(netease_id):
               "99NeroCake": "[[用户:99NeroCake]]",
               "-绘芸-": "[[用户:月霜]]",
               "Ecauchy": "[[用户:Ecauchy]]",
+              "古明地恋詩": "[[用户:古明地恋詩]]",
+              "凛然薾华": "[[用户:凛然薾华]]",
               "秘封罐头里的翅融": "[[用户:鬼翅融]]"}
 
     if netease_id in id_dic.keys():
