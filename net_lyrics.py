@@ -97,7 +97,7 @@ def getTrackList(id_album, name_album):
 
 def songpage(sid, sname, savetxt):
     # 获取歌词页面
-    writelinez = ['\n\n#####################################\n\n', sname, "    "]
+    writelinez = ['%\n#####################################\n\n', sname, "    "]
     url_track = 'http://music.163.com/api/song/lyric?os=pc&id=' + str(sid) + '&lv=-1&kv=-1&tv=-1'
     page_song = getHtml(url_track)
     if len(page_song) > 150:
@@ -123,6 +123,7 @@ def lyric_define(line_ja):
     # 判断歌词是否为附加信息
     info_re = ["作曲", "作词", "原曲",
                "サークル：", "アルバム：",
+               "END",
                "Album", "Circle", "Origin",
                "Vocal", "Lyric", "Arrange"]
     for keywords in info_re:
@@ -299,4 +300,4 @@ def saveAll(groupnum):
 # print(getAlbumList(19783)[1][0])
 # getTrackList(82840,"test")
 # songpage('27580735','xx','xxx')
-saveAll(18)
+saveAll(69)
