@@ -138,7 +138,7 @@ def songpage(sid, sname, savetxt):
 
 def lyric_define(line_ja):
     # 判断歌词是否为附加信息
-    info_re = ["作曲", "作词", "原曲",
+    info_re = ["作曲", "作词", "原曲", "编曲",
                "サークル：", "アルバム：",
                "END",
                "Album", "Circle", "Origin",
