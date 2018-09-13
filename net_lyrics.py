@@ -90,8 +90,8 @@ def getAlbumList(id_Group):
     abmlist = []
     for abms in abmdata:
         abms = abms[::-1]
-        abmnm = getRegex('"(.+?)","id', abms)[0]
-        abmid = getRegex('"id":(\d+),', abms)[0]
+        abmnm = getRegex(r'"(.+?)","id', abms)[0]
+        abmid = getRegex(r'"id":(\d+),', abms)[0]
         abmlist.append([abmnm, abmid])
     return abmlist
 
@@ -317,4 +317,4 @@ def saveAll(groupnum):
 # print(getAlbumList(19783)[1][0])
 # getTrackList(82840,"test")
 # songpage('27580735','xx','xxx')
-saveAll(59)
+saveAll(12)
